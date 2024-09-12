@@ -41,7 +41,7 @@ def get_ip(ip_type, index="default"):
     """
     if index is False:  # disabled
         return False
-    elif type(index) == list:  # 如果获取到的规则是列表，则依次判断列表中每一个规则，直到找到一个可以正确获取到的IP
+    elif type(index) is list:  # 如果获取到的规则是列表，则依次判断列表中每一个规则，直到找到一个可以正确获取到的IP
         value = None
         for i in index:
             value = get_ip(ip_type, i)
@@ -104,6 +104,7 @@ def update_ip(ip_type, cache, dns, proxy_list):
     record_type = (ip_type == '4') and 'A' or 'AAAA'
     update_fail = False  # https://github.com/NewFuture/DDNS/issues/16
     for domain in domains:
+        domain = domain.lower()  # https://github.com/NewFuture/DDNS/issues/431
         if change_dns_record(dns, proxy_list, domain=domain, ip=address, record_type=record_type):
             update_fail = True
     if cache is not False:
